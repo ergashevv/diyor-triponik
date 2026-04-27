@@ -1,26 +1,53 @@
-import { carClasses } from '../../utils/mockData'
-
 export default defineEventHandler(async (event) => {
-  const { location, to } = getQuery(event) as { location?: string, to?: string }
+  const { location, pickupDate, returnDate } = getQuery(event) as { location: string, pickupDate: string, returnDate: string }
 
-  // Simple location-based price adjustment
-  const multiplier = location && to ? 1.2 : 1.0
+  // Using the requested car.svg asset for all results
+  const cars = [
+    {
+      id: 1,
+      name: 'Hyundai Solaris',
+      description: 'Avtomat transmissiya, Konditsioner',
+      image: '/images/cars/car-image.png',
+      price: '82.90',
+      capacity: 3,
+      bags: 4,
+      stars: 5,
+      type: 'Ekonom'
+    },
+    {
+      id: 2,
+      name: 'Evolute I-JOY',
+      description: 'Avtomat transmissiya, Konditsioner, electrocar',
+      image: '/images/cars/car-image.png',
+      price: '115.00',
+      capacity: 5,
+      bags: 2,
+      stars: 4,
+      type: 'Biznes'
+    },
+    {
+      id: 3,
+      name: 'Peugeot 408',
+      description: 'Avtomat transmissiya, Konditsioner, Premium dizayn',
+      image: '/images/cars/car-image.png',
+      price: '145.50',
+      capacity: 3,
+      bags: 1,
+      stars: 5,
+      type: 'Premium'
+    },
+    {
+      id: 4,
+      name: 'Hyundai Solaris',
+      description: 'Avtomat transmissiya, Konditsioner, Komfort tanlov',
+      image: '/images/cars/car-image.png',
+      price: '82.90',
+      capacity: 3,
+      bags: 4,
+      stars: 5,
+      type: 'Ekonom'
+    }
+  ]
 
-  const results = carClasses.map(c => ({
-    ...c,
-    price: (c.price * multiplier).toFixed(2),
-    image: '/assets/images/car.svg',
-    dark: c.id % 2 === 0
-  }))
-
-  // Add more variations to have "more" results
-  const extraResults = results.map(c => ({
-    ...c,
-    id: c.id + 100,
-    name: `${c.name} Plus`,
-    price: (Number(c.price) * 1.15).toFixed(2),
-    notice: Math.max(1, c.notice - 2)
-  }))
-
-  return [...results, ...extraResults]
+  return cars
 })

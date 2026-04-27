@@ -90,9 +90,9 @@
       <div class="flex flex-col md:pr-3 lg:pr-4 pt-4 md:pt-0 border-t md:border-t-0 border-gray-200">
         <!-- Reviews & Rating -->
         <div class="flex items-center justify-between md:justify-end gap-2 mb-3 md:mb-4">
-          <span class="text-blue-600 font-medium text-xs md:text-[13px]">1.4K sharh</span>
+          <span class="text-blue-600 font-medium text-xs md:text-[13px]">{{ train.reviewCount || '1.2K' }} sharh</span>
           <div class="w-9 h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm md:text-base">
-            9
+            {{ train.score || '9.0' }}
           </div>
         </div>
 
@@ -105,7 +105,7 @@
               <div class="text-gray-500 text-[10px] md:text-[11px] lg:text-[12px]">{{ train.availableSeats.plaskart.passengers }}</div>
             </div>
             <div class="text-right">
-              <div class="font-bold text-blue-600 text-xs md:text-[13px] whitespace-nowrap">{{ formatPrice(train.availableSeats.plaskart.price) }} ₽ dan</div>
+              <div class="font-bold text-blue-600 text-xs md:text-[13px] whitespace-nowrap">{{ formatPrice(train.availableSeats.plaskart.price) }} so'm dan</div>
             </div>
           </div>
 
@@ -116,7 +116,7 @@
               <div class="text-gray-500 text-[10px] md:text-[11px] lg:text-[12px]">{{ train.availableSeats.kupe.passengers }}</div>
             </div>
             <div class="text-right">
-              <div class="font-bold text-blue-600 text-xs md:text-[13px] whitespace-nowrap">{{ formatPrice(train.availableSeats.kupe.price) }} ₽ dan</div>
+              <div class="font-bold text-blue-600 text-xs md:text-[13px] whitespace-nowrap">{{ formatPrice(train.availableSeats.kupe.price) }} so'm dan</div>
             </div>
           </div>
 
@@ -139,7 +139,7 @@
           <!-- Price -->
           <div class="shrink-0">
             <div class="font-bold text-gray-900 mb-0.5 text-lg md:text-xl lg:text-[21px]">
-              {{ formatPrice(train.availableSeats.plaskart.price) }} ₽ dan
+              {{ formatPrice(train.availableSeats.plaskart.price) }} so'm dan
             </div>
             <div class="text-gray-500 text-[11px] md:text-[12px]">bir kishi uchun</div>
           </div>

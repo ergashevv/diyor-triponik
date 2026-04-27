@@ -209,8 +209,9 @@
           :class="tab.active ? 'bg-[#2563EB] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
           class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap flex flex-col items-center min-w-[85px] md:min-w-[100px] shrink-0"
         >
-          <div :class="tab.active ? 'text-white text-[10px] md:text-xs' : 'text-gray-600 text-[10px] md:text-xs'">{{ tab.label }}</div>
-          <div :class="tab.active ? 'text-white font-semibold text-xs md:text-sm' : 'text-gray-900 font-semibold text-xs md:text-sm'">{{ tab.date }}</div>
+          <div :class="tab.active ? 'text-white' : 'text-gray-500'" class="text-[10px] uppercase font-bold">{{ tab.label }}</div>
+          <div :class="tab.active ? 'text-white' : 'text-gray-900'" class="font-bold text-xs">{{ tab.date }}</div>
+          <div :class="tab.active ? 'text-blue-100' : 'text-blue-600'" class="text-[10px] font-medium">{{ formatPrice(tab.price) }} so'm</div>
         </button>
         <div class="ml-auto hidden lg:block shrink-0">
           <button class="bg-white text-blue-600 flex items-center gap-2 p-2 md:p-3 rounded-xl hover:bg-gray-50 transition-colors whitespace-nowrap">
@@ -577,12 +578,29 @@ const filteredTrains = ref([])
 const loading = ref(false)
 const error = ref(null)
 
-const dateTabs = ref([
-  { id: 1, label: '2 — 4 kun', date: '7 231 ₽', active: false },
-  { id: 2, label: '31 avg — 4 sen', date: '8 730 ₽', active: false },
-  { id: 3, label: '1 — 1.5 kun', date: '8 116 ₽', active: true },
-  { id: 4, label: '1 — 3 sen', date: '6 975 ₽', active: false }
-])
+const generateDateTabs = () => {
+  const tabs = []
+  const today = new Date()
+  const days = ['Ya', 'Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sha']
+  
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(today)
+    d.setDate(today.getDate() + i)
+    const dateStr = `${d.getDate()} ${uzMonths[d.getMonth()]}`
+    const dayName = days[d.getDay()]
+    
+    tabs.push({
+      id: i + 1,
+      label: dayName,
+      date: dateStr,
+      price: (150000 + (Math.random() * 50000)).toFixed(0),
+      active: i === 0
+    })
+  }
+  return tabs
+}
+
+const dateTabs = ref(generateDateTabs())
 
 const fetchTrains = async () => {
   loading.value = true

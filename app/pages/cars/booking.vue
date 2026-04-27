@@ -1,214 +1,168 @@
 <template>
-  <div class="bg-gray-50">
-    <!-- Blue top section with curve -->
-    <div class="relative bg-[#0D1B4C] h-72 overflow-hidden">
-      <div class="absolute bottom-0 left-0 w-full">
-        <svg class="block w-full h-16 md:h-24" fill="none" preserveAspectRatio="none"
-             viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,120 L0,60 Q600,-30 1200,60 L1200,120 Z" fill="#f9fafb"></path>
-        </svg>
-      </div>
-    </div>
+  <div class="bg-[#F8F9FB] min-h-screen relative overflow-hidden">
+    <img src="~/assets/images/car-bg.png" class="h-[300px] w-full absolute top-0 left-0 z-0 object-cover object-center" />
 
-    <!-- Card overlapping the curve -->
-    <div class="max-w-3xl mx-auto px-4 -mt-44 relative z-10 pb-12">
-      <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+    <div class="container mx-auto px-4 relative z-10 pt-16 pb-24">
+      <div class="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto items-start">
+        <main class="w-full lg:flex-1 bg-white rounded-[24px] p-6 sm:p-10 shadow-lg border border-gray-100">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <h1 class="text-2xl font-black text-gray-900">Transfer paytidagi parametrlarni kiriting</h1>
+              <p class="text-sm text-gray-500 mt-2">
+                {{ carName }}
+              </p>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-sm text-gray-500">
+              <UIcon name="i-heroicons-calendar-days" class="h-4 w-4" />
+              <span>{{ formattedDate }}</span>
+            </div>
+          </div>
 
-        <!-- Title -->
-        <h2 class="text-lg md:text-xl font-bold text-gray-900 mb-6">
-          Transfer paytidagi parametrlarni kiriting
-        </h2>
+          <div class="grid gap-4 md:grid-cols-2">
+            <input v-model="form.firstName" placeholder="Ism" class="field-input" />
+            <input v-model="form.lastName" placeholder="Familiya" class="field-input" />
 
-        <!-- Row 1: Date | Time | Airline | Flight -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-          <!-- Date -->
-          <UPopover mode="click" :ui="{ container: 'bg-white dark:bg-white border border-gray-200 shadow-lg' }">
-            <button type="button" class="w-full h-12 px-3 border border-gray-200 rounded-xl flex items-center justify-between gap-2 text-sm hover:bg-gray-50 transition-colors">
-              <span :class="date ? 'text-gray-900' : 'text-gray-400'">
-                {{ date ? formatDate(date) : 'Sana' }}
-              </span>
-              <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-              </svg>
-            </button>
-            <template #content="{ close }">
-              <UCalendar v-model="date" class="p-2" @update:modelValue="close" :ui="calUi"/>
-            </template>
-          </UPopover>
+            <div class="overflow-hidden rounded-[12px] border border-slate-200 bg-white shadow-[0_4px_16px_rgba(15,23,42,0.08)]">
+              <div class="flex h-[60px] items-stretch">
+                <button type="button" class="flex w-[72px] items-center justify-center gap-2 border-r border-slate-200 bg-white px-3 text-slate-700">
+                  <img src="https://flagcdn.com/w40/uz.png" alt="UZ" class="h-4 w-6 rounded-[2px] object-cover" />
+                  <UIcon name="i-heroicons-chevron-down" class="h-4 w-4 text-slate-400" />
+                </button>
+                <label class="flex flex-1 flex-col justify-center px-4 text-left">
+                  <span class="text-[11px] font-medium leading-none text-slate-500">Bog'lanish uchun telefon</span>
+                  <div class="mt-1 flex items-center gap-2">
+                    <span class="text-[16px] font-semibold text-slate-800">+998</span>
+                    <input v-model="form.phone" placeholder="" class="w-full bg-transparent text-[16px] font-medium outline-none placeholder:text-slate-300" />
+                  </div>
+                </label>
+              </div>
+            </div>
 
-          <!-- Time -->
-          <button type="button" class="w-full h-12 px-3 border border-gray-200 rounded-xl flex items-center justify-between gap-2 text-sm hover:bg-gray-50 transition-colors">
-            <input
-              v-model="flightTime"
-              type="time"
-              placeholder="Qo'nish vaqti"
-              class="flex-1 outline-none bg-transparent text-gray-700 placeholder:text-gray-400 text-sm"
-            />
-            <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </button>
+            <input v-model="form.email" placeholder="Email (Tasdiqlash xabarini jo'natamiz)" class="field-input" />
+          </div>
 
-          <!-- Airline -->
-          <div class="relative">
-            <select
-              v-model="airline"
-              class="w-full h-12 px-3 pr-8 border border-gray-200 rounded-xl text-sm text-gray-700 appearance-none outline-none bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+          <div class="mt-8 border-t border-slate-100 pt-7">
+            <h2 class="text-[22px] font-extrabold text-slate-800">Haydovchilik guvohnamasi</h2>
+
+            <div class="mt-5 grid gap-4 md:grid-cols-2">
+              <input v-model="license.number" placeholder="Guvohnama raqami" class="field-input" />
+              <div class="relative">
+                <input v-model="license.date" type="date" class="field-input pr-12" />
+                <UIcon name="i-heroicons-calendar-days" class="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 border-t border-slate-100 pt-7">
+            <h2 class="text-[22px] font-extrabold text-slate-800">To'lov usulini tanlang</h2>
+
+            <div class="mt-5 rounded-[16px] border border-slate-200 bg-white p-4">
+              <label class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <input v-model="paymentMethod" type="radio" value="card" />
+                  <span class="font-medium text-slate-800">Kredit/Debit karta</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <img src="~/assets/images/mastercard.png" alt="Mastercard" class="h-5" />
+                  <img src="~/assets/images/visa.png" alt="Visa" class="h-5" />
+                </div>
+              </label>
+
+              <div class="mt-4 grid gap-3">
+                <input v-model="card.number" placeholder="Karta raqami" class="field-input" />
+                <input v-model="card.name" placeholder="Karta egasi" class="field-input" />
+                <div class="grid gap-3 md:grid-cols-2">
+                  <input v-model="card.expiry" placeholder="Amal qilish muddati" class="field-input" />
+                  <input v-model="card.cvv" placeholder="CVV/CVC" class="field-input" />
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-[16px] border border-slate-200 bg-white p-4">
+              <p class="text-sm font-medium text-slate-800">Boshqa to'lov usullari</p>
+              <div class="mt-3 flex flex-wrap items-center gap-3">
+                <img src="~/assets/images/uzcard.png" alt="UzCard" class="h-5" />
+                <img src="~/assets/images/humo.png" alt="HUMO" class="h-5" />
+                <img src="~/assets/images/payme.png" alt="Payme" class="h-5" />
+                <img src="~/assets/images/click.png" alt="Click" class="h-5" />
+                <img src="~/assets/images/stripe.png" alt="Stripe" class="h-5" />
+              </div>
+            </div>
+
+            <p class="mt-5 text-xs text-gray-500 leading-relaxed">
+              Ushbu bronni yuborish orqali men Triponik.com
+              <a href="#" class="text-blue-600 hover:underline">Foydalanish shartlari</a>
+              va
+              <a href="#" class="text-blue-600 hover:underline">Maxfiylik siyosatini</a>
+              o'qib chiqqanimni va ularga roziligimni tasdiqlayman.
+            </p>
+          </div>
+        </main>
+
+        <aside class="w-full lg:w-[380px] shrink-0 bg-white rounded-[24px] p-8 shadow-lg border border-gray-100">
+          <h2 class="text-xl font-black text-gray-900 mb-8">Buyurtma tafsilotlari</h2>
+
+          <div class="space-y-8">
+            <div class="space-y-5">
+              <p class="text-[14px] font-black text-gray-900 leading-none">{{ tripTitle }}</p>
+              <div class="space-y-4">
+                <div class="flex items-start gap-3">
+                  <div class="w-2.5 h-2.5 rounded-full bg-[#10B981] mt-1 shrink-0"></div>
+                  <div>
+                    <p class="text-[13px] font-black text-gray-900 leading-tight">{{ fromLocation }}</p>
+                    <p class="text-[11px] font-bold text-gray-400 mt-1">{{ dateLabel }}</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-2.5 h-2.5 rounded-full bg-[#10B981] mt-1 shrink-0"></div>
+                  <div>
+                    <p class="text-[13px] font-black text-gray-900 leading-tight">{{ toLocation }}</p>
+                    <p class="text-[11px] font-bold text-gray-400 mt-1">{{ timeLabel }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <p class="text-[14px] font-black text-gray-900">Avtomobil</p>
+              <div class="bg-[#F8F9FB] rounded-[16px] p-5 border border-gray-50">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-black text-[#1F2937] text-[14px]">{{ carName }}</h4>
+                  <p class="font-black text-[#1F2937] text-[14px]">{{ priceLabel }}</p>
+                </div>
+                <p class="text-[11px] font-bold text-gray-400 mb-4">yoki shunga o'xshash</p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-[11px] font-bold text-gray-400">Kiritilgan</span>
+                  <span class="text-[13px] font-black text-[#1F2937]">750 km</span>
+                </div>
+                <div class="flex justify-center py-2">
+                  <img src="/images/cars/car-image.png" class="w-[180px] h-auto object-contain" />
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <p class="text-[14px] font-black text-gray-900">Qo'shimcha xizmatlar</p>
+              <div class="flex items-center justify-between">
+                <span class="text-[13px] font-medium text-gray-500">Oyna va shinalar himoyasi</span>
+                <span class="text-[13px] font-black text-gray-900">3,600 so'm</span>
+              </div>
+            </div>
+
+            <div class="bg-[#1F2937] rounded-[16px] p-6 flex items-center justify-between">
+              <span class="text-white font-bold text-[14px]">Ijara summasi:</span>
+              <span class="text-white font-black text-[18px]">{{ priceLabel }}</span>
+            </div>
+
+            <button
+              @click="handlePay"
+              :disabled="!agreeTerms"
+              class="w-full py-4 bg-[#2563EB] hover:bg-blue-700 text-white font-black rounded-[16px] transition-all text-[15px] shadow-lg shadow-blue-100 uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <option value="" disabled>Aviakompaniya</option>
-              <option>Uzbekistan Airways</option>
-              <option>Aeroflot</option>
-              <option>Turkish Airlines</option>
-              <option>Emirates</option>
-              <option>Air Astana</option>
-              <option>FlyDubai</option>
-            </select>
-            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+              To'lash
+            </button>
           </div>
-
-          <!-- Flight number -->
-          <input
-            v-model="flightNumber"
-            type="text"
-            placeholder="Reys raqami"
-            class="w-full h-12 px-3 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-          />
-        </div>
-
-        <!-- Row 2: Toggle + Tablichka yozuv -->
-        <div class="flex flex-col sm:flex-row gap-3 mb-4">
-          <div class="flex items-center gap-3 shrink-0">
-            <USwitch v-model="withSign" color="blue" />
-            <span class="text-sm text-gray-700 whitespace-nowrap">Tablichka bilan kutib olish</span>
-            <span class="text-sm text-blue-600 font-medium whitespace-nowrap">+ 1 105 P</span>
-          </div>
-          <input
-            v-if="withSign"
-            v-model="signText"
-            type="text"
-            placeholder="Tablichkadagi yozuv"
-            class="w-full sm:flex-1 h-12 px-3 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-          />
-        </div>
-
-        <!-- Row 3: Comment -->
-        <input
-          v-model="comment"
-          type="text"
-          placeholder="Sayohat haqida izoh"
-          class="w-full h-12 px-3 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors mb-6"
-        />
-
-        <!-- Yo'lovchi soni -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
-          <span class="text-base font-bold text-gray-900">Yo'lovchi soni:</span>
-          <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
-            <!-- Adults -->
-            <div class="flex items-center gap-3">
-              <span class="text-sm text-gray-600 w-16 sm:w-auto">Kattalar</span>
-              <button @click="adults > 1 && adults--" type="button"
-                class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-                </svg>
-              </button>
-              <span class="w-4 text-center font-semibold text-gray-900">{{ adults }}</span>
-              <button @click="adults++" type="button"
-                class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white hover:bg-blue-700">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-              </button>
-            </div>
-            <!-- Children -->
-            <div class="flex items-center gap-3">
-              <span class="text-sm text-gray-600 w-16 sm:w-auto">Bolalar</span>
-              <button @click="children > 0 && children--" type="button"
-                class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-                </svg>
-              </button>
-              <span class="w-4 text-center font-semibold text-gray-900">{{ children }}</span>
-              <button @click="children++" type="button"
-                class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white hover:bg-blue-700">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Qaytishga transfer -->
-        <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-6 py-4 border-t border-b border-gray-100">
-          <span class="text-base font-bold text-gray-900 shrink-0">Qaytishga transfer:</span>
-          <span class="text-sm text-gray-500 sm:flex-1">Esdan chiqarmaslik uchun hoziroq buyurtma bering.</span>
-          <button type="button"
-            class="self-start sm:self-auto flex items-center gap-1.5 px-4 py-2 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shrink-0">
-            Buyurtma qilish
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Kontakt ma'lumotlari -->
-        <h3 class="text-base font-bold text-gray-900 mb-4">Kontakt ma'lumotlari</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-          <input
-            v-model="firstName"
-            type="text"
-            placeholder="Ism"
-            class="h-12 px-3 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-          />
-          <input
-            v-model="lastName"
-            type="text"
-            placeholder="Familiya"
-            class="h-12 px-3 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-          />
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-          <!-- Phone -->
-          <div class="flex h-12 border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-colors">
-            <div class="flex items-center gap-1 px-3 border-r border-gray-200 bg-gray-50 shrink-0">
-              <span class="text-base">🇺🇿</span>
-              <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
-            </div>
-            <input
-              v-model="phone"
-              type="tel"
-              placeholder="Bog'lanish uchun telefon"
-              class="flex-1 px-3 text-sm text-gray-700 placeholder:text-gray-400 outline-none bg-transparent"
-            />
-          </div>
-          <input
-            v-model="email"
-            type="email"
-            placeholder="Email (Tasdiqlash xabarini jo'natamiz)"
-            class="h-12 px-3 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-          />
-        </div>
-
-        <!-- Footer: Total + Continue -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-100 gap-3">
-          <div>
-            <span class="text-sm text-gray-500 mr-2">Jami:</span>
-            <span class="text-xl font-bold text-gray-900">{{ totalPrice }} $</span>
-          </div>
-          <button
-            @click="handleContinue"
-            class="w-full sm:w-auto px-8 h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all"
-          >
-            Davom etish
-          </button>
-        </div>
-
+        </aside>
       </div>
     </div>
   </div>
@@ -218,47 +172,38 @@
 const route = useRoute()
 const router = useRouter()
 
-const date = ref(null)
-const flightTime = ref('')
-const airline = ref('')
-const flightNumber = ref('')
-const withSign = ref(false)
-const signText = ref('')
-const comment = ref('')
-const adults = ref(1)
-const children = ref(0)
-const firstName = ref('')
-const lastName = ref('')
-const phone = ref('+998')
-const email = ref('')
+const carName = computed(() => route.query.carName || 'Standart')
+const tripTitle = computed(() => route.query.tripTitle || '3 kunga ijara')
+const fromLocation = computed(() => route.query.from || 'Moskva, Baumanskaya, Rossiya')
+const toLocation = computed(() => route.query.to || 'Moskva, Baumanskaya, Rossiya')
+const priceLabel = computed(() => `${route.query.price || '4 360'} $`)
+const dateLabel = computed(() => route.query.pickupDate || '25 iyul 2025, 15:00')
+const timeLabel = computed(() => route.query.time || '28 iyul 2025, 15:00')
 
-const formatDate = (d) => {
-  if (!d) return ''
-  return `${String(d.day).padStart(2, '0')}.${String(d.month).padStart(2, '0')}.${d.year}`
-}
-
-const calUi = {
-  base: 'bg-white dark:bg-white',
-  container: 'bg-white dark:bg-white',
-  header: 'text-gray-900 dark:text-gray-900',
-  months: 'bg-white dark:bg-white',
-  cell: {
-    base: 'text-gray-900 dark:text-gray-900',
-    selected: 'bg-blue-600 dark:bg-blue-600 text-white dark:text-white',
-    today: 'border-2 border-blue-600 dark:border-blue-600'
-  }
-}
-
-const basePrice = Number(route.query.price) || 82.90
-const signExtra = 1105
-
-const totalPrice = computed(() => {
-  let total = basePrice * (adults.value + children.value * 0.5)
-  if (withSign.value) total += signExtra / 100
-  return total.toFixed(2)
+const form = ref({
+  firstName: '',
+  lastName: '',
+  phone: '',
+  email: ''
 })
 
-const handleContinue = () => {
+const license = ref({
+  number: '',
+  date: ''
+})
+
+const card = ref({
+  number: '',
+  name: '',
+  expiry: '',
+  cvv: ''
+})
+
+const paymentMethod = ref('card')
+const agreeTerms = ref(true)
+
+const handlePay = () => {
+  if (!agreeTerms.value) return
   router.push({
     path: '/cars/checkout',
     query: {
@@ -267,13 +212,39 @@ const handleContinue = () => {
       from: route.query.from,
       to: route.query.to,
       pickupDate: route.query.pickupDate,
-      time: flightTime.value
+      time: route.query.time
     }
   })
 }
 
-useSeoMeta({ title: 'Transfer buyurtma - Triponik' })
+useSeoMeta({
+  title: 'To\'lov - Triponik',
+  description: 'Avtomobil ijarasi uchun to\'lov sahifasi.'
+})
 </script>
 
 <style scoped>
+.field-input {
+  height: 60px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgb(226 232 240);
+  background: #ffffff;
+  padding: 0 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(30 41 59);
+  outline: none;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field-input:focus {
+  border-color: #2f66f0;
+  box-shadow: 0 0 0 4px rgba(47, 102, 240, 0.1);
+}
+
+.field-input::placeholder {
+  color: rgb(148 163 184);
+}
 </style>
