@@ -1,0 +1,450 @@
+{
+    "openapi": "3.0.0",
+    "x-origin": [
+        {
+            "url": "https://api.triponik.uz/?format=openapi",
+            "format": "swagger",
+            "version": "2.0",
+            "converter": {
+                "url": "https://github.com/mermade/oas-kit",
+                "version": "7.0.8"
+            }
+        }
+    ],
+    "info": {
+        "title": "Rdgroup.uz API",
+        "description": "Documentation for Rdgroup.uz by Fathulla Latipov",
+        "license": {
+            "name": "BSD License"
+        },
+        "version": "v1"
+    },
+    "security": [
+        {
+            "Basic": []
+        }
+    ],
+    "paths": {
+        "/amadeus/airlines-info": {
+            "get": {
+                "operationId": "amadeus_airlines-info_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/airlines-routes": {
+            "get": {
+                "operationId": "amadeus_airlines-routes_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/cities": {
+            "get": {
+                "operationId": "amadeus_cities_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-airport-check-in": {
+            "get": {
+                "operationId": "amadeus_flight-airport-check-in_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-airport-location/{locationId}/": {
+            "get": {
+                "operationId": "amadeus_flight-airport-location_read",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "locationId",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ]
+        },
+        "/amadeus/flight-airport-locations": {
+            "get": {
+                "operationId": "amadeus_flight-airport-locations_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-airport-routes": {
+            "get": {
+                "operationId": "amadeus_flight-airport-routes_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-cheap": {
+            "get": {
+                "operationId": "amadeus_flight-cheap_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-destinations": {
+            "get": {
+                "operationId": "amadeus_flight-destinations_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-nearest-airport": {
+            "get": {
+                "operationId": "amadeus_flight-nearest-airport_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-recommended-locations": {
+            "get": {
+                "operationId": "amadeus_flight-recommended-locations_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-schedule-flights": {
+            "get": {
+                "operationId": "amadeus_flight-schedule-flights_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-travel-prediction-on-time": {
+            "get": {
+                "operationId": "amadeus_flight-travel-prediction-on-time_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flight-travel-predictions": {
+            "get": {
+                "operationId": "amadeus_flight-travel-predictions_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/flights-list": {
+            "get": {
+                "operationId": "amadeus_flights-list_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/hotels": {
+            "get": {
+                "operationId": "amadeus_hotels_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/hotels-in-city": {
+            "get": {
+                "operationId": "amadeus_hotels-in-city_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/hotels-list": {
+            "get": {
+                "operationId": "amadeus_hotels-list_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/hotels-sentiments": {
+            "get": {
+                "operationId": "amadeus_hotels-sentiments_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/hotels-with-geocode": {
+            "get": {
+                "operationId": "amadeus_hotels-with-geocode_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/amadeus/itinerary-price-metrics": {
+            "get": {
+                "operationId": "amadeus_itinerary-price-metrics_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "amadeus"
+                ]
+            },
+            "parameters": []
+        },
+        "/hotel/hotel/availability/": {
+            "post": {
+                "operationId": "hotel_hotel_availability_create",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "hotel"
+                ]
+            },
+            "parameters": []
+        },
+        "/hotel/hotel/booking/": {
+            "post": {
+                "operationId": "hotel_hotel_booking_create",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "hotel"
+                ]
+            },
+            "parameters": []
+        },
+        "/hotel/hotel/cancel/{booking_reference}/": {
+            "delete": {
+                "operationId": "hotel_hotel_cancel_delete",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "hotel"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "booking_reference",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ]
+        },
+        "/hotel/hotel/checkrate/": {
+            "post": {
+                "operationId": "hotel_hotel_checkrate_create",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "hotel"
+                ]
+            },
+            "parameters": []
+        },
+        "/hotel/hotel/status/": {
+            "get": {
+                "operationId": "hotel_hotel_status_list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "hotel"
+                ]
+            },
+            "parameters": []
+        }
+    },
+    "servers": [
+        {
+            "url": "https://api.triponik.uz"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "Basic": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        }
+    }
+}

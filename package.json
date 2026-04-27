@@ -1,0 +1,29 @@
+{
+  "name": "triponik-frontend",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "generate:api-types": "swagger2openapi https://api.triponik.uz/?format=openapi -o .temp/openapi3.json && openapi-typescript .temp/openapi3.json -o types/api-schema.d.ts"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^4.2.1",
+    "nuxt": "^4.2.1",
+    "openapi-fetch": "^0.15.0",
+    "vue": "^3.5.25",
+    "vue-i18n": "^11.2.2",
+    "vue-router": "^4.6.3",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "@pinia/nuxt": "^0.11.3",
+    "@types/node": "^24.10.1",
+    "openapi-typescript": "^7.10.1",
+    "swagger2openapi": "^7.0.8"
+  }
+}

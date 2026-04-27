@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* Calendar Range Selection Styling - Reka UI Calendar */
+/* Selected dates - both start and end */
+[data-reka-calendar-cell-trigger][data-selected="true"],
+[data-reka-calendar-cell-trigger][data-selection-start="true"],
+[data-reka-calendar-cell-trigger][data-selection-end="true"] {
+  background-color: #2563EB !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Highlighted/in-range dates */
+[data-reka-calendar-cell-trigger][data-highlighted]:not([data-selected="true"]) {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+}
+
+/* Today's date */
+[data-reka-calendar-cell-trigger][data-today]:not([data-selected="true"]) {
+  border: 2px solid #2563EB !important;
+  font-weight: 600;
+}
+
+/* Hover state */
+[data-reka-calendar-cell-trigger]:hover:not([data-disabled]):not([data-unavailable]) {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
