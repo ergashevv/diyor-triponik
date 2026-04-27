@@ -6,52 +6,60 @@ export default defineEventHandler(async (event) => {
   }
 
   const trainTypes = [
-    { name: 'Afrosiyob', speed: '250 km/h', icon: 'i-mdi-train-variant', color: 'blue' },
-    { name: 'Sharq', speed: '140 km/h', icon: 'i-mdi-train', color: 'green' },
-    { name: 'O\'zbekiston', speed: '120 km/h', icon: 'i-mdi-train', color: 'red' },
-    { name: 'Nasaf', speed: '140 km/h', icon: 'i-mdi-train', color: 'orange' }
-  ]
-
-  const wagonTypes = [
-    { type: 'VIP', price: 450000, seats: 12, icon: 'i-mdi-star-face' },
-    { type: 'Biznes', price: 280000, seats: 24, icon: 'i-mdi-briefcase' },
-    { type: 'Ekonnom', price: 175000, seats: 48, icon: 'i-mdi-account-group' }
+    { name: 'Afrosiyob', speed: '250 km/h', class: 'Tezkor', numbers: ['059A', '061'] },
+    { name: 'Sharq', speed: '140 km/h', class: 'Tunik', numbers: ['761', '763'] },
+    { name: 'O\'zbekiston', speed: '120 km/h', class: 'Yo\'lovchi', numbers: ['053', '067', '145'] }
   ]
 
   const trains = []
-  const startTime = 5 // 5:00
-  const count = 12 // 12 trains per day
+  const count = 10
 
   for (let i = 0; i < count; i++) {
-    const depH = startTime + (i * 3) + Math.floor(Math.random() * 2)
+    const depH = 5 + (i * 2)
     const depM = [0, 15, 30, 45][Math.floor(Math.random() * 4)]
-    const travelTime = 2 + Math.floor(Math.random() * 4) // hours
+    const travelTime = 3 + Math.floor(Math.random() * 3)
     
     const arrH = (depH + travelTime) % 24
-    const arrM = (depM + 10 + Math.floor(Math.random() * 30)) % 60
+    const arrM = (depM + 20) % 60
 
     const trainType = trainTypes[Math.floor(Math.random() * trainTypes.length)]
     
+    // Original UI expects availableSeats with plaskart, kupe, vip keys
+    const availableSeats = {
+      plaskart: {
+        available: Math.floor(Math.random() * 40) + 10,
+        price: 150000 + Math.floor(Math.random() * 50000),
+        passengers: `${Math.floor(Math.random() * 20) + 5} pasida`
+      },
+      kupe: {
+        available: Math.floor(Math.random() * 20) + 5,
+        price: 280000 + Math.floor(Math.random() * 80000),
+        passengers: `${Math.floor(Math.random() * 10) + 2} pasida`
+      },
+      vip: {
+        available: Math.random() > 0.5 ? Math.floor(Math.random() * 10) + 2 : 'Joy yoq',
+        price: 450000 + Math.floor(Math.random() * 150000),
+        passengers: ''
+      }
+    }
+
     trains.push({
       id: `T${i + 1}`,
-      number: `${100 + i * 2}${['A', 'B', 'F', 'Q'][Math.floor(Math.random() * 4)]}`,
+      number: trainType.numbers[Math.floor(Math.random() * trainType.numbers.length)],
       name: trainType.name,
-      type: trainType.name,
+      class: trainType.class,
       departureTime: `${String(depH).padStart(2, '0')}:${String(depM).padStart(2, '0')}`,
       arrivalTime: `${String(arrH).padStart(2, '0')}:${String(arrM).padStart(2, '0')}`,
-      duration: `${travelTime}s ${Math.abs(arrM - depM)}d`,
+      duration: `${travelTime} soat 20 daqiqa`,
       departureStation: `${from} vokzali`,
       arrivalStation: `${to} markaziy vokzali`,
       departureCity: from,
       arrivalCity: to,
       departureDate: date || '17 okt, pay',
       arrivalDate: date || '17 okt, pay',
-      availableSeats: 10 + Math.floor(Math.random() * 50),
-      wagonTypes: wagonTypes.map(w => ({
-        ...w,
-        price: w.price + (Math.floor(Math.random() * 5) * 10000)
-      })),
-      amenities: ['wifi', 'food', 'power', 'ac', 'toilet']
+      availableSeats,
+      type: trainType.name.toLowerCase(), // for filtering
+      timeSlot: depH < 12 ? 'morning' : depH < 18 ? 'afternoon' : 'evening'
     })
   }
 
