@@ -3,12 +3,12 @@ import { adaptSuggestions } from '../../utils/adapters'
 
 // Mock destinations (Next.js'dagi kabi)
 const MOCK_DESTINATIONS = [
-  { code: 'TAS', name: 'Toshkent', countryCode: 'UZ', type: 'CITY' },
-  { code: 'SAM', name: 'Samarqand', countryCode: 'UZ', type: 'CITY' },
-  { code: 'BUX', name: 'Buxoro', countryCode: 'UZ', type: 'CITY' },
-  { code: 'XIV', name: 'Xiva', countryCode: 'UZ', type: 'CITY' },
+  { code: 'TAS', name: 'Toshkent (Tashkent)', countryCode: 'UZ', type: 'CITY' },
+  { code: 'SAM', name: 'Samarkand (Samarqand)', countryCode: 'UZ', type: 'CITY' },
+  { code: 'BUX', name: 'Bukhara (Buxoro)', countryCode: 'UZ', type: 'CITY' },
+  { code: 'XIV', name: 'Khiva (Xiva)', countryCode: 'UZ', type: 'CITY' },
   { code: 'NAM', name: 'Namangan', countryCode: 'UZ', type: 'CITY' },
-  { code: "FAR", name: "Farg'ona", countryCode: 'UZ', type: 'CITY' },
+  { code: "FAR", name: "Fergana (Farg'ona)", countryCode: 'UZ', type: 'CITY' },
   { code: 'AND', name: 'Andijon', countryCode: 'UZ', type: 'CITY' },
 
   // Middle East
@@ -28,9 +28,9 @@ const MOCK_DESTINATIONS = [
   { code: 'IZM', name: 'Izmir', countryCode: 'TR', type: 'CITY' },
 
   // Europe
-  { code: 'PAR', name: 'Paris', countryCode: 'FR', type: 'CITY' },
+  { code: 'PAR', name: 'Paris (Parij)', countryCode: 'FR', type: 'CITY' },
   { code: 'LON', name: 'London', countryCode: 'GB', type: 'CITY' },
-  { code: 'ROM', name: 'Rome', countryCode: 'IT', type: 'CITY' },
+  { code: 'ROM', name: 'Rome (Rim)', countryCode: 'IT', type: 'CITY' },
   { code: 'MAD', name: 'Madrid', countryCode: 'ES', type: 'CITY' },
   { code: 'BCN', name: 'Barcelona', countryCode: 'ES', type: 'CITY' },
   { code: 'AMS', name: 'Amsterdam', countryCode: 'NL', type: 'CITY' },
@@ -130,9 +130,14 @@ function filterMockDestinations(query: string) {
   if (!query) return MOCK_DESTINATIONS.slice(0, 12)
 
   const lowerQuery = query.toLowerCase()
+    .replace(/a/g, '[ao]') // Tashkent vs Toshkent flexibility
+    .replace(/o/g, '[ao]')
+
+  const regex = new RegExp(lowerQuery, 'i')
+
   return MOCK_DESTINATIONS.filter(dest =>
-    dest.name.toLowerCase().includes(lowerQuery) ||
-    dest.code.toLowerCase().includes(lowerQuery)
+    regex.test(dest.name.toLowerCase()) ||
+    dest.code.toLowerCase().includes(query.toLowerCase())
   ).slice(0, 20)
 }
 
@@ -149,33 +154,32 @@ export default defineEventHandler(async (event) => {
 
   try {
     const baseUrl = getHotelApiBaseUrl()
-    console.log('[Suggest API] Backend URL:', `${baseUrl}/hotel/suggest/`)
+    const upstreamUrl = `${baseUrl}/amadeus/cities`
+    console.log('[Suggest API] Backend URL:', upstreamUrl)
 
-    const response = await $fetch(`${baseUrl}/hotel/suggest/`, {
+    const response = await $fetch(upstreamUrl, {
       method: 'GET',
       params: { query: searchQuery.trim() },
       headers: buildUpstreamHeaders({
         'Accept': 'application/json',
       }),
-      timeout: 10000,
+      timeout: 15000,
     })
 
-    console.log('[Suggest API] Backend javob:', response)
-
     const suggestions = adaptSuggestions(response)
-    console.log('[Suggest API] Adapt qilingan:', suggestions)
-
-    // Agar backend bo'sh qaytarsa, mock data
-    if (suggestions.length > 0) {
-      console.log('[Suggest API] Backend ma\'lumot qaytardi:', suggestions.length, 'ta')
-      return suggestions
+    
+    // Agar API ishladi-yu, lekin bo'sh qaytardi - mock dataga fallback qilamiz 
+    // (tashkent/toshkent kabi holatlar uchun)
+    if (suggestions.length === 0) {
+      console.log('[Suggest API] Real API bo\'sh qaytardi, mock datadan qidirilmoqda...')
+      return filterMockDestinations(searchQuery)
     }
 
-    console.log('[Suggest API] Backend bo\'sh, mock data qaytarilmoqda')
-    return filterMockDestinations(searchQuery)
+    console.log('[Suggest API] Real API muvaffaqiyatli:', suggestions.length, "ta natija")
+    return suggestions
   } catch (error: any) {
-    console.error('[Suggest API] Xatolik:', error)
-    // Fallback: mock data qaytarish
+    const statusCode = error.response?.status || 500
+    console.error(`[Suggest API] Backend xatosi (${statusCode}), mock dataga o'tildi:`, error.message)
     return filterMockDestinations(searchQuery)
   }
 })

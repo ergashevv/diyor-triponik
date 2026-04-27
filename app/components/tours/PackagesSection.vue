@@ -107,79 +107,27 @@ const selectTab = (val) => {
   showAll.value = false
 }
 
-const tours = [
-  {
-    id: 1,
-    src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80&fit=crop',
-    name: 'Shveytsariya Alplari',
-    country: 'Shveytsariya',
-    rating: 4.8, price: 950, days: 7,
-    tags: ['all', 'mountain', 'nature'],
-  },
-  {
-    id: 2,
-    src: 'https://images.unsplash.com/photo-1570939274717-7eda259b50ed?w=600&q=80&fit=crop',
-    name: 'Kappadokiya',
-    country: 'Turkiya',
-    rating: 4.9, price: 850, days: 5,
-    tags: ['all', 'nature', 'city'],
-  },
-  {
-    id: 3,
-    src: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?w=600&q=80&fit=crop',
-    name: 'Santorini',
-    country: 'Gretsiya',
-    rating: 4.7, price: 750, days: 6,
-    tags: ['all', 'beach', 'city'],
-  },
-  {
-    id: 4,
-    src: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80&fit=crop',
-    name: 'Bali oroli',
-    country: 'Indoneziya',
-    rating: 4.9, price: 780, days: 8,
-    tags: ['all', 'beach', 'nature'],
-  },
-  {
-    id: 5,
-    src: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600&q=80&fit=crop',
-    name: 'Istanbul',
-    country: 'Turkiya',
-    rating: 4.6, price: 620, days: 5,
-    tags: ['all', 'city'],
-  },
-  {
-    id: 6,
-    src: 'https://images.unsplash.com/photo-1464817739973-0128fe77aaa1?w=600&q=80&fit=crop',
-    name: 'Parij',
-    country: 'Fransiya',
-    rating: 4.8, price: 1100, days: 6,
-    tags: ['all', 'city'],
-  },
-  {
-    id: 7,
-    src: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80&fit=crop',
-    name: 'Maldiv',
-    country: 'Maldiv',
-    rating: 4.9, price: 1800, days: 7,
-    tags: ['all', 'beach'],
-  },
-  {
-    id: 8,
-    src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80&fit=crop',
-    name: 'Norvegiya fyordlari',
-    country: 'Norvegiya',
-    rating: 4.7, price: 1350, days: 9,
-    tags: ['all', 'nature', 'mountain'],
-  },
-]
+const { searchTours } = useTourAPI()
+const tours = ref([])
+const loading = ref(true)
 
-const filteredTours = computed(() =>
-  tours.filter(t => t.tags.includes(activeTab.value))
-)
+const fetchTours = async () => {
+  loading.value = true
+  try {
+    tours.value = await searchTours(activeTab.value)
+  } catch (err) {
+    console.error('Failed to fetch tours:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+watch(activeTab, fetchTours)
+
+onMounted(fetchTours)
 
 const visibleTours = computed(() =>
-  showAll.value ? filteredTours.value : filteredTours.value.slice(0, INITIAL_COUNT)
+  showAll.value ? tours.value : tours.value.slice(0, INITIAL_COUNT)
 )
 </script>
 

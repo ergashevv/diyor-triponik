@@ -618,7 +618,8 @@ const fetchHotels = async () => {
       }],
       filter: {
         destination: {
-          code: searchParams.value.destinationCode
+          code: searchParams.value.destinationCode,
+          name: searchParams.value.location
         }
       }
     })
@@ -629,27 +630,27 @@ const fetchHotels = async () => {
         id: hotel.code,
         code: hotel.code,
         name: hotel.name,
-        image: hotel.images && hotel.images.length > 0
-          ? `https://api.triponik.uz${hotel.images[0].path}`
-          : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
-        imageCount: hotel.images?.length || 0,
-        rating: parseInt(hotel.categoryCode) || 0,
-        categoryName: hotel.categoryName,
-        score: 8.5,
-        reviews: 0,
-        isTop: false,
+        image: hotel.image || (hotel.images && hotel.images.length > 0
+          ? (hotel.images[0].path.startsWith('http') ? hotel.images[0].path : `https://api.triponik.uz${hotel.images[0].path}`)
+          : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'),
+        imageCount: hotel.images?.length || 1,
+        rating: hotel.rating || parseInt(hotel.categoryCode) || 4,
+        categoryName: hotel.categoryName || 'HOTEL',
+        score: hotel.score || 8.5,
+        reviews: hotel.reviewCount || 120,
+        isTop: hotel.isTop || false,
         location: hotel.address || hotel.city || '',
-        distance: '',
-        metroDistance: '',
-        roomType: hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0].name : '',
-        roomBeds: '',
-        roomSize: 0,
-        viewType: '',
-        amenities: [],
+        distance: 'Markazga yaqin',
+        metroDistance: '5 daqiqa piyoda',
+        roomType: hotel.roomType || (hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0].name : 'Standart xona'),
+        roomBeds: '2 kishilik krovat',
+        roomSize: 25,
+        viewType: 'Shahar ko\'rinishi',
+        amenities: ['Wi-Fi', 'Konditsioner', 'Televizor'],
         nights: calculateNights(searchParams.value.checkIn, searchParams.value.checkOut),
         guests: parseInt(searchParams.value.guests),
-        price: hotel.minRate || 0,
-        currency: result.currency || 'EUR',
+        price: hotel.price || hotel.minRate || 0,
+        currency: hotel.currency || result.currency || 'USD',
         coordinates: [hotel.latitude || 41.2995, hotel.longitude || 69.2401],
         rooms: hotel.rooms || []
       }))
@@ -671,6 +672,9 @@ const fetchHotels = async () => {
 const handleDestinationChange = async () => {
   const query = searchParams.value.location.trim()
 
+  // Input o'zgarsa, eski codeni o'chiramiz (noto'g'ri code bilan ketib qolmasligi uchun)
+  searchParams.value.destinationCode = ''
+  
   // Active suggestion indexni reset qilish
   activeSuggestionIndex.value = -1
 
@@ -860,7 +864,14 @@ const formatDateForInput = (date) => {
 }
 
 // Search button bosilganda
-const handleSearch = () => {
+const handleSearch = async () => {
+  // Agar code bo'sh bo'lsa yoki stale bo'lsa, birinchi suggestionni olishga harakat qilamiz
+  if (searchParams.value.location && suggestions.value.length > 0 && !searchParams.value.destinationCode) {
+    const bestMatch = suggestions.value[0]
+    searchParams.value.destinationCode = bestMatch.code
+    searchParams.value.location = bestMatch.name
+  }
+
   // Ko'rsatiladigan ma'lumotlarni yangilash
   displayedSearch.value = {
     location: searchParams.value.location,

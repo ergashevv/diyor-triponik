@@ -232,59 +232,26 @@
 </template>
 
 <script setup>
-const activeTab = ref('cancelled')
+const activeTab = ref('all')
 const loading = ref(false)
 const currentImageIndex = ref({})
 
 // Mock user email - bu keyinchalik auth dan olinadi
 const userEmail = ref('farrux.abdullayev@list.ru')
 
-// Mock bookings data - bu keyinchalik API dan olinadi
-const bookings = ref([
-  {
-    reference: '955288909',
-    code: '588670936',
-    hotelName: 'Hotel Winterfell Tverskaya',
-    phone: '+7 495 545 41 61',
-    address: 'Staropimenovskij pereulok, 6, Moskva',
-    location: 'Moskva, Rossiya',
-    rooms: 1,
-    guests: 2,
-    checkIn: '14:00',
-    checkOut: '12:00',
-    checkInDate: '2025-05-17',
-    checkOutDate: '2025-05-18',
-    price: 4090,
-    currency: '₽',
-    status: 'cancelled',
-    images: [
-      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800',
-      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800',
-      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800',
-      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
-      'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800',
-      'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800',
-      'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800',
-      'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800',
-      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800',
-      'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800',
-      'https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=800',
-      'https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800',
-      'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800',
-      'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800',
-      'https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800',
-      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800',
-      'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?w=800',
-      'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800',
-      'https://images.unsplash.com/photo-1584132915807-fd1f5fbc078f?w=800',
-      'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=800',
-      'https://images.unsplash.com/photo-1609766857041-ed402ea8069a?w=800',
-      'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800',
-      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800',
-      'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800'
-    ]
+// State
+const bookings = ref([])
+
+onMounted(async () => {
+  loading.value = true
+  try {
+    bookings.value = await $fetch('/api/profile/bookings')
+  } catch (err) {
+    console.error('Failed to fetch bookings:', err)
+  } finally {
+    loading.value = false
   }
-])
+})
 
 const filteredBookings = computed(() => {
   if (activeTab.value === 'all') return bookings.value

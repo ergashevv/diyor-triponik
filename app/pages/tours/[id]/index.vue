@@ -1,5 +1,14 @@
 <template>
   <div class="bg-gray-100 min-h-screen">
+    <!-- Loading State -->
+    <div v-if="loading" class="flex items-center justify-center min-h-screen">
+      <div class="text-center">
+        <UIcon name="i-mdi-loading" class="animate-spin w-10 h-10 text-blue-600 mb-2" />
+        <p class="text-gray-600">Yuklanmoqda...</p>
+      </div>
+    </div>
+
+    <div v-else-if="tour">
 
     <!-- Dark Blue Header -->
     <div class="pt-5 pb-8 md:pb-60" style="background-color: #001549;">
@@ -601,6 +610,7 @@
     </div>
     <!-- end container -->
 
+    </div>
   </div>
 </template>
 
@@ -645,61 +655,26 @@ const formatDate = (date) => {
   return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`
 }
 
-const tour = {
-  name: 'Novotel Rayong Rim Pae Resort',
-  location: 'Kao Lak, Tailand',
-  score: 9.2,
-  stars: 4,
-  badge: 'Joylar kam qoldi',
-  price: 273,
-  dateLabel: '19 iyuldan 7 tun',
-  images: [
-    'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80&fit=crop',
-    'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&q=80&fit=crop',
-    'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&q=80&fit=crop',
-    'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=80&fit=crop',
-  ],
-  amenities: [
-    { label: '30 M\nplyajgacha',        path: '<path stroke-linecap="round" stroke-linejoin="round" d="M13 4.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM11.5 8l-1.5 4h3l-1 5M9 9l-1.5 2.5M15 9l1.5 2.5"/>' },
-    { label: 'plyajga yaqin',           path: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 17c2-2.5 4-3.5 6-3.5s4 1 6 1 4-1 6-3.5M3 12c2-2 4-3 6-3s4 1 6 1 4-1 6-3"/>' },
-    { label: "bolalar bilan ta'til",    path: '<circle cx="8" cy="5" r="2"/><circle cx="16" cy="5" r="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 22v-5a2 2 0 012-2h4a2 2 0 012 2v5M8 15v7m4-7v7"/>' },
-    { label: 'juftliklar\nuchun ideal', path: '<path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>' },
-    { label: 'konditsioner',            path: '<rect x="2" y="7" width="20" height="7" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 14v3m4-3v3m4-3v3m4-3v3"/>' },
-    { label: 'qumli plyaj',             path: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3C8.5 3 6 7 6 12h12c0-5-2.5-9-6-9zm0 0v18M6 12h12"/>' },
-  ],
-}
+const { getTourDetail } = useTourAPI()
+const tour = ref(null)
+const loading = ref(true)
+const tourVariants = ref([])
 
-const tourDates = ref([
-  { label: '17 iyul, pay',  price: null, rubPrice: null,      bestPrice: false, active: false },
-  { label: '18 iyul, ju',   price: null, rubPrice: '199 463', bestPrice: false, active: false },
-  { label: '19 iyul, shan', price: 245,  rubPrice: null,      bestPrice: true,  active: true  },
-  { label: '20 iyul, yak',  price: null, rubPrice: '186 543', bestPrice: false, active: false },
-  { label: '21 iyul, пн',   price: null, rubPrice: null,      bestPrice: false, active: false },
-  { label: '22 iyul, вт',   price: null, rubPrice: null,      bestPrice: false, active: false },
-  { label: '23 iyul, chor', price: null, rubPrice: null,      bestPrice: false, active: false },
-])
+const tourDates = ref([])
 
-const setActiveDate = (idx) => {
-  tourDates.value.forEach((d, i) => { d.active = i === idx })
-}
-
-const roomImages = [
-  'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&q=80&fit=crop',
-  'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=200&q=80&fit=crop',
-  'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=200&q=80&fit=crop',
-]
-
-const variantsOpen = ref(false)
-
-const tourVariants = [
-  { roomName: "Bog' ko'rinishli yaxshilangan xona",       meal: 'AI - Barchasi kiritilgan, 2 yoshi katta', images: roomImages, departure: '19 iyul, shan', returnDate: '26 iyul, shan', nights: 7, hotelNights: 6, price: 247 },
-  { roomName: "Dengiz ko'rinishli standart xona",          meal: 'BB - Nonushta kiritilgan, 2 yoshi katta',  images: roomImages, departure: '19 iyul, shan', returnDate: '26 iyul, shan', nights: 7, hotelNights: 6, price: 289 },
-  { roomName: "Deluxe xona, ochiq basseyn ko'rinishi",     meal: 'HB - Yarim pansion, 2 yoshi katta',       images: roomImages, departure: '19 iyul, shan', returnDate: '27 iyul, yak', nights: 8, hotelNights: 7, price: 315 },
-  { roomName: "Superior xona, bog' ko'rinishi",            meal: 'AI - Barchasi kiritilgan, 2 yoshi katta', images: roomImages, departure: '20 iyul, yak',  returnDate: '27 iyul, yak', nights: 7, hotelNights: 6, price: 263 },
-  { roomName: "Junior Suite, dengiz panoramasi",           meal: 'BB - Nonushta kiritilgan, 2 yoshi katta',  images: roomImages, departure: '20 iyul, yak',  returnDate: '27 iyul, yak', nights: 7, hotelNights: 6, price: 374 },
-  { roomName: "Family xona, ikki yotoq",                   meal: 'FB - To\'liq pansion, 2 yoshi katta',     images: roomImages, departure: '21 iyul, du',   returnDate: '28 iyul, du',  nights: 7, hotelNights: 6, price: 412 },
-  { roomName: "Bog' ko'rinishli yaxshilangan xona",       meal: 'HB - Yarim pansion, 2 yoshi katta',       images: roomImages, departure: '21 iyul, du',   returnDate: '28 iyul, du',  nights: 7, hotelNights: 6, price: 258 },
-]
+onMounted(async () => {
+  loading.value = true
+  try {
+    const data = await getTourDetail(route.params.id)
+    tour.value = data
+    tourVariants.value = data.variants || []
+    tourDates.value = data.tourDates || []
+  } catch (err) {
+    console.error('Failed to fetch tour details:', err)
+  } finally {
+    loading.value = false
+  }
+})
 
 const hotelServices = [
   {

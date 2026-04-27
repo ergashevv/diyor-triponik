@@ -1,0 +1,233 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Triponik Booking API",
+    "description": "Subset of HotelBeds BookingAPI operations exposed by Triponik backend. Generated from provided Postman collection.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.triponik.uz/"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "Stay": {
+        "type": "object",
+        "properties": {
+          "checkIn": { "type": "string", "format": "date" },
+          "checkOut": { "type": "string", "format": "date" }
+        },
+        "required": ["checkIn", "checkOut"]
+      },
+      "Occupancy": {
+        "type": "object",
+        "properties": {
+          "rooms": { "type": "integer" },
+          "adults": { "type": "integer" },
+          "children": { "type": "integer" },
+          "paxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string", "enum": ["AD", "CH"] },
+                "age": { "type": "integer" }
+              },
+              "required": ["type"]
+            }
+          }
+        },
+        "required": ["rooms", "adults", "children"]
+      },
+      "AvailabilityRequest": {
+        "type": "object",
+        "properties": {
+          "stay": { "$ref": "#/components/schemas/Stay" },
+          "occupancies": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Occupancy" }
+          },
+          "hotels": {
+            "type": "object",
+            "properties": {
+              "hotel": {
+                "type": "array",
+                "items": { "type": "integer" }
+              }
+            }
+          },
+          "destination": {
+            "type": "object",
+            "properties": {
+              "code": { "type": "string" }
+            }
+          }
+        },
+        "required": ["stay", "occupancies"]
+      },
+      "CheckRateRequest": {
+        "type": "object",
+        "properties": {
+          "upselling": { "type": "boolean" },
+          "rooms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rateKey": { "type": "string" }
+              },
+              "required": ["rateKey"]
+            }
+          }
+        },
+        "required": ["rooms"]
+      },
+      "Pax": {
+        "type": "object",
+        "properties": {
+          "roomId": { "type": "integer" },
+          "type": { "type": "string", "enum": ["AD", "CH"] },
+          "name": { "type": "string" },
+          "surname": { "type": "string" },
+          "age": { "type": "integer" }
+        },
+        "required": ["roomId", "type", "name", "surname"]
+      },
+      "BookingRoom": {
+        "type": "object",
+        "properties": {
+          "rateKey": { "type": "string" },
+          "paxes": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Pax" }
+          }
+        },
+        "required": ["rateKey", "paxes"]
+      },
+      "BookingRequest": {
+        "type": "object",
+        "properties": {
+          "holder": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "surname": { "type": "string" }
+            },
+            "required": ["name", "surname"]
+          },
+          "rooms": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/BookingRoom" }
+          },
+          "clientReference": { "type": "string" },
+          "remark": { "type": "string" },
+          "tolerance": { "type": "number" }
+        },
+        "required": ["holder", "rooms", "clientReference"]
+      }
+    }
+  },
+  "security": [
+    { "BasicAuth": [] }
+  ],
+  "paths": {
+    "/hotel/hotel/status/": {
+      "get": {
+        "summary": "Health check",
+        "operationId": "getStatus",
+        "responses": {
+          "200": {
+            "description": "API status OK"
+          }
+        }
+      }
+    },
+    "/hotel/hotel/availability/": {
+      "post": {
+        "summary": "Search hotel availability",
+        "operationId": "searchHotels",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AvailabilityRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Hotels with availability returned"
+          }
+        }
+      }
+    },
+    "/hotel/hotel/checkrate/": {
+      "post": {
+        "summary": "Recheck rates",
+        "operationId": "checkRates",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CheckRateRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Check rate success"
+          }
+        }
+      }
+    },
+    "/hotel/hotel/booking/": {
+      "post": {
+        "summary": "Create booking",
+        "operationId": "createBooking",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BookingRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Booking confirmed"
+          },
+          "201": {
+            "description": "Booking created"
+          }
+        }
+      }
+    },
+    "/hotel/hotel/cancel/{bookingReference}/": {
+      "delete": {
+        "summary": "Cancel booking",
+        "operationId": "cancelBooking",
+        "parameters": [
+          {
+            "name": "bookingReference",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking cancelled"
+          }
+        }
+      }
+    }
+  }
+}
+

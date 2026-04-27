@@ -79,46 +79,17 @@
 </template>
 
 <script setup>
-const destinations = [
-  {
-    id: 1,
-    name: 'Istanbul',
-    country: 'Turkiya',
-    flag: '🇹🇷',
-    months: 'May - Sentabr',
-    duration: '5 soat',
-    image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800',
-    price: 4250000
-  },
-  {
-    id: 2,
-    name: 'Dubai',
-    country: 'BAA',
-    flag: '🇦🇪',
-    months: 'Aprel - Oktyabr',
-    duration: '4 soat',
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800',
-    price: 6780000
-  },
-  {
-    id: 3,
-    name: 'Kabul',
-    country: 'Afg\'aniston',
-    flag: '🇦🇫',
-    months: 'Mart - Noyabr',
-    duration: '2 soat',
-    image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800',
-    price: 2900000
-  },
-  {
-    id: 4,
-    name: 'Bangkok',
-    country: 'Tailand',
-    flag: '🇹🇭',
-    months: 'Iyun - Avgust',
-    duration: '7 soat',
-    image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800',
-    price: 3780000
+const { getPopularDestinations } = useTourAPI()
+const destinations = ref([])
+const loading = ref(true)
+
+onMounted(async () => {
+  try {
+    destinations.value = await getPopularDestinations()
+  } catch (err) {
+    console.error('Failed to fetch destinations:', err)
+  } finally {
+    loading.value = false
   }
-]
+})
 </script>

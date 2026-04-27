@@ -218,8 +218,31 @@ const searchForm = ref({
   isBusinessTrip: false
 })
 
+const router = useRouter()
+
 const handleSearch = () => {
   console.log('Search:', searchForm.value)
-  // Navigate to results or emit event
+  
+  if (activeTab.value === 'flights') {
+    router.push({
+      path: '/flights/search',
+      query: {
+        origin: searchForm.value.from || 'TAS',
+        destination: searchForm.value.to || 'DXB',
+        date: searchForm.value.date || '2026-06-01',
+        adults: searchForm.value.passengers.split(' ')[0] || '1'
+      }
+    })
+  } else if (activeTab.value === 'hotels') {
+    router.push({
+      path: '/hotels/search',
+      query: {
+        location: searchForm.value.to || searchForm.value.from || 'Dubai',
+      }
+    })
+  } else {
+    // For other tabs, navigate to a general search or specific subpage
+    router.push(`/${activeTab.value}/search`)
+  }
 }
 </script>
