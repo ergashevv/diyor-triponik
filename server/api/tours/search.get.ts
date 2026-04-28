@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     distanceBeach: t.distanceBeach || '100 m plyajgacha',
     bookings: t.bookings || 'Oyda 15 marta bron qilingan',
     updatedAt: t.updatedAt || 'Hozirgina yangilandi',
-    nights: t.nights || `${t.days} kecha`,
+    nights: (t as typeof t & { nights?: string }).nights || `${t.days} kecha`,
     amenities: [
       { icon: 'i-mdi-bed-outline', label: '1-qator' },
       { icon: 'i-mdi-wifi', label: 'Wi-Fi' },

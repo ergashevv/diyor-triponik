@@ -21,16 +21,18 @@ export default defineEventHandler(async (event) => {
     // OpenAPI specifikatsiyasiga muvofiq payloadni tozalaymiz
     const sanitizedPayload = {
       holder: {
-        name: String(body.holder.name).trim(),
-        surname: String(body.holder.surname).trim()
+        name: String(body.holder.name || '').trim(),
+        surname: String(body.holder.surname || '').trim(),
+        email: body.holder.email,
+        phone: body.holder.phone
       },
-      rooms: body.rooms.map((room: any) => ({
+      rooms: (body.rooms || []).map((room: any) => ({
         rateKey: room.rateKey,
         paxes: (room.paxes || []).map((pax: any) => ({
           roomId: Number(pax.roomId || 1),
           type: pax.type || 'AD',
-          name: String(pax.name).trim(),
-          surname: String(pax.surname).trim(),
+          name: String(pax.name || '').trim(),
+          surname: String(pax.surname || '').trim(),
           age: pax.age ? Number(pax.age) : undefined
         }))
       })),
@@ -44,24 +46,30 @@ export default defineEventHandler(async (event) => {
     const baseUrl = getHotelApiBaseUrl()
     const upstreamUrl = `${baseUrl}/hotel/hotel/booking/`
 
-    const response: any = await $fetch(upstreamUrl, {
-      method: 'POST',
-      headers: buildUpstreamHeaders({
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }),
-      body: sanitizedPayload,
-      timeout: 30000,
-    })
+    try {
+      const response: any = await $fetch(upstreamUrl, {
+        method: 'POST',
+        headers: buildUpstreamHeaders({
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }),
+        body: sanitizedPayload,
+        timeout: 30000,
+      })
 
-    console.log('[Booking API] Booking successful:', response?.reference || response?.booking?.reference)
-    return response
+      console.log('[Booking API] Booking successful:', response?.reference || response?.booking?.reference)
+      return response
+    } catch (fetchError: any) {
+      console.error('[Booking API] Upstream error status:', fetchError.statusCode)
+      console.error('[Booking API] Upstream error body:', JSON.stringify(fetchError.data, null, 2))
+      throw fetchError
+    }
 
   } catch (error: any) {
-    console.error('[Booking API] Error:', error.message)
+    console.error('[Booking API] Final handler error:', error.message)
     throw createError({
       statusCode: error.statusCode || 500,
-      message: `Booking error: ${error.message}`,
+      message: `Booking failed: ${error.data?.message || error.message || 'Unknown error'}`,
       data: error.data,
     })
   }

@@ -185,7 +185,7 @@
               </div>
               <div class="flex items-center gap-2 md:gap-5 px-3 md:px-5">
                 <div class="hidden sm:block w-[130px] shrink-0">
-                  <img src="~/assets/logos/container.svg" alt="Airline Logo" class="w-15 h-15 object-contain mb-1">
+                  <img src="~/assets/logos/Container.svg" alt="Airline Logo" class="w-15 h-15 object-contain mb-1">
                   <span class="inline-block text-[10px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-sm mb-1">{{ opt.out.class }}</span>
                   <p class="text-[11px] text-gray-500 mb-4">{{ opt.out.flightNo }}</p>
                 </div>
@@ -227,7 +227,7 @@
               </div>
               <div class="flex items-center gap-2 md:gap-5 px-3 md:px-5">
                 <div class="hidden sm:block w-[130px] shrink-0">
-                  <img src="~/assets/logos/container.svg" alt="Airline Logo" class="w-15 h-15 object-contain mb-1">
+                  <img src="~/assets/logos/Container.svg" alt="Airline Logo" class="w-15 h-15 object-contain mb-1">
                   <span class="inline-block text-[10px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-sm mb-1">{{ opt.ret.class }}</span>
                   <p class="text-[11px] text-gray-500 mt-0.5">{{ opt.ret.flightNo }}</p>
                 </div>

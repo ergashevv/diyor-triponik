@@ -445,6 +445,12 @@ const formatCalendarDate = (calendarDate) => {
   return `${day} ${month}`
 }
 
+// Format price with spaces (e.g. 100 000)
+const formatPrice = (price) => {
+  if (!price) return '0'
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+}
+
 // Stations suggestions logic
 const fromSuggestions = ref([])
 const toSuggestions = ref([])
